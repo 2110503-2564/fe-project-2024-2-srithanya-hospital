@@ -20,6 +20,7 @@ export default function RemoveFavourite({ campgroundId, token }: { campgroundId:
       }
 
       alert('Removed from favourites');
+      window.location.reload();
        // Reload the page after removing from favourites
     } catch (error) {
       console.error(error);

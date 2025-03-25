@@ -40,9 +40,7 @@ export default function BookingActions({ bookingId, token }: BookingActionsProps
 
     if (response.ok) {
       alert('Booking updated successfully!');
-      if (window.confirm('Booking updated successfully! Click OK to reload.')) {
-        window.location.reload(); // Reload the page to fetch updated bookings
-      }
+      window.location.reload(); // Reload the page to fetch updated bookings
     } else {
       alert('Failed to update booking.');
     }

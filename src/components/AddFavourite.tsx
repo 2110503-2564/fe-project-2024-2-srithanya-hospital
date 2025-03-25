@@ -16,6 +16,7 @@ export default function AddFavourite({ campgroundId, token }: AddFavouriteProps)
     try {
       await addToFavorites(token, campgroundId);
       alert('Campground added to favorites!');
+      window.location.reload();
       // Reload the page after adding to favourites
     } catch (error) {
       console.error('Error adding to favorites:', error);
