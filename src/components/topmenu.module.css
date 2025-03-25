@@ -31,7 +31,7 @@
 
 .itemcontainer:hover {
     font-size: 11pt;
-    color: black;
+    color: gray;
     font-weight: bold; /* Increase font size on hover */
 }
 

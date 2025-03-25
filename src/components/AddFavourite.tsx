@@ -30,7 +30,7 @@ export default function AddFavourite({ campgroundId, token }: AddFavouriteProps)
   return (
     <button
       onClick={handleAddToFavorites}
-      className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ${
+      className={`mt-5 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 ${
         isLoading ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       disabled={isLoading}

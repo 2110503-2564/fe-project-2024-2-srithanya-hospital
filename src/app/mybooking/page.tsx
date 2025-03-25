@@ -40,14 +40,14 @@ export default async function MyBookingPage() {
   return (
     <main className="p-5">
       <h1 className="text-3xl font-bold mb-5">My Bookings </h1>
-      <p className="text-gray-600">
+      <p className="text-gray-600 leading-loose">
         User: {profile.data.name} ({profile.data.email}) <br/>
-        Role: {profile.data.role}
+          Role: {profile.data.role}
       </p>
       {bookings.length === 0 ? (
         <div>No bookings found.</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-5">
           {bookings.map((booking: { members: Number; namelastname:string; _id: string; campground: { name?: string; address?: string } | null; bookingDate: string; user: { name: string; tel: string } }) => (
             <div
               key={booking._id}

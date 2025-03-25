@@ -43,7 +43,7 @@ export default function Banner() {
           </h3>
           <button
             onClick={() => router.push('/campgrounds')}
-            className="bg-white text-cyan-600 border border-cyan-600 font-semibold py-3 px-6 rounded hover:bg-cyan-600 hover:text-white hover:border-transparent transition-colors"
+            className="bg-white text-gray-600 border border-gray-600 font-semibold py-3 px-6 rounded hover:bg-gray-600 hover:text-white hover:border-transparent transition-colors"
           >
             Explore Campgrounds
           </button>

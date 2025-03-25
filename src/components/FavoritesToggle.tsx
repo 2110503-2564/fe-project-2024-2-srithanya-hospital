@@ -16,14 +16,14 @@ export default function FavoritesToggle({ showFavorites }: { showFavorites: bool
   };
 
   return (
-    <label className="inline-flex items-center">
+    <label className="inline-flex items-center cursor-pointer space-x-2">
       <input
         type="checkbox"
         checked={showFavorites}
         onChange={handleChange}
-        className="mr-2"
+        className="w-7 h-7 text-green-500 bg-gray-200 border-gray-300 rounded focus:ring-2 focus:ring-green-400 transition-all"
       />
-      Show Only Favorites
+      <span className="text-gray-700 font-medium text-lg">Show Only Favorites</span>
     </label>
   );
 }

@@ -93,7 +93,7 @@ export default function CampgroundActions({
     <>
       <button
         onClick={() => setShowForm(!showForm)}
-        className="bg-green-500 text-white px-4 py-2 rounded mb-4"
+        className={`px-6 py-3 rounded-lg mb-4 shadow-md transition-all duration-300 transform             ${showForm ? 'bg-red-500 hover:bg-red-600 focus:ring-red-300 active:bg-green-500' : 'bg-green-500 hover:bg-green-600 focus:ring-green-300 active:bg-red-500'} text-white hover:scale-105 active:scale-95 focus:ring-4`}
       >
         {showForm ? 'Cancel' : 'Add Campground'}
       </button>
@@ -218,7 +218,7 @@ export default function CampgroundActions({
   ) : (
     <button
       onClick={handleDeleteCampground}
-      className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
+      className="absolute top-2 right-2 bg-red-500 text-white px-2.5 py-1 rounded shadow transition-all duration-300 transform hover:bg-red-600 hover:scale-105 active:bg-red-700 active:scale-95 focus:ring-2 focus:ring-red-300 text-sm"
     >
       Delete
     </button>
