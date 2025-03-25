@@ -23,6 +23,7 @@ export default function BookingButton({ campgroundId, token }: { campgroundId: s
       const success = await bookCampground(campgroundId, bookingDate, token, nameLastname, members );
       if (success) {
         alert("Booking successful!");
+        window.location.href = '/mybooking'; // Redirect to bookings page after booking
         handleClose();
       } else {
         alert("Booking failed!");

@@ -40,7 +40,9 @@ export default function BookingActions({ bookingId, token }: BookingActionsProps
 
     if (response.ok) {
       alert('Booking updated successfully!');
-      window.location.reload(); // Reload the page to fetch updated bookings
+      if (window.confirm('Booking updated successfully! Click OK to reload.')) {
+        window.location.reload(); // Reload the page to fetch updated bookings
+      }
     } else {
       alert('Failed to update booking.');
     }
@@ -63,7 +65,9 @@ export default function BookingActions({ bookingId, token }: BookingActionsProps
 
     if (response.ok) {
       alert('Booking deleted successfully!');
-      window.location.reload(); // Reload the page to fetch updated bookings
+      if (window.confirm('Booking deleted successfully!')) {
+        // Reload the page to fetch updated bookings
+      }
     } else {
       alert('Failed to delete booking.');
     }

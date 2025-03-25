@@ -7,7 +7,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 import UpdateButton from '@/components/UpdateButton';
 import getUserProfile from '@/libs/getUserProfile';
-import getFavourites from '@/libs/getFavourites';
 
 export default async function CampgroundDetailPage({ params }: { params: { _id: string } }) {
   const session = await getServerSession(authOptions);
@@ -33,11 +32,18 @@ export default async function CampgroundDetailPage({ params }: { params: { _id: 
     }
 
     const Favs = await response.json();
+    console.log('Fetched favourites response:', Favs);
 
-  let isFavourite = false;
-  console.log('User favourites:', Favs.data.map((favorite: { campground: any; }) => favorite.campground)); 
-  // isFavourite = favourites.includes(params._id);
-  
+    // Ensure we are accessing the correct part of the response
+    const favourites = Favs.data.map((fav: any) => ({
+        campgroundId: fav.campground._id,
+        favouriteId: fav._id,
+    }));
+    console.log('Extracted favourites:', favourites);
+
+    const favouriteEntry = favourites.find((fav: { campgroundId: string; }) => fav.campgroundId === params._id);
+    const isFavourite = !!favouriteEntry;
+    console.log(`Is campground ${params._id} a favourite?`, isFavourite);
 
   return (
     <main className="text-center p-10 bg-gray-50 h-full">
@@ -72,11 +78,20 @@ export default async function CampgroundDetailPage({ params }: { params: { _id: 
       {session && session.user && (
         <div className="space-x-4 mt-6 flex justify-center">
           {isFavourite ? (
-            <RemoveFavourite campgroundId={params._id} token={session.user.token} />
+            <RemoveFavourite
+              campgroundId={favouriteEntry?.favouriteId}
+              token={session.user.token}
+            />
           ) : (
-            <AddFavourite campgroundId={params._id} token={session.user.token} />
+            <AddFavourite
+              campgroundId={params._id}
+              token={session.user.token}
+            />
           )}
-          <BookingButton campgroundId={params._id} token={session.user.token} />
+          <BookingButton
+            campgroundId={params._id}
+            token={session.user.token}
+          />
           {profile.data.role === "admin" && (
             <UpdateButton campgroundId={params._id} token={session.user.token} />
           )}

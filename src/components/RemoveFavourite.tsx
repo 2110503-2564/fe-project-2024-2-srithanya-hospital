@@ -8,7 +8,7 @@ export default function RemoveFavourite({ campgroundId, token }: { campgroundId:
   const handleRemoveFavourite = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/favourites/${campgroundId}`, {
+      const response = await fetch(`https://sdev-project-server.vercel.app/api/v1/favorites/${campgroundId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -19,8 +19,8 @@ export default function RemoveFavourite({ campgroundId, token }: { campgroundId:
         throw new Error('Failed to remove from favourites');
       }
 
-      // Optionally, trigger a re-fetch or update UI state
       alert('Removed from favourites');
+       // Reload the page after removing from favourites
     } catch (error) {
       console.error(error);
       alert('Error removing from favourites');
@@ -33,7 +33,7 @@ export default function RemoveFavourite({ campgroundId, token }: { campgroundId:
     <button
       onClick={handleRemoveFavourite}
       disabled={loading}
-      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
+      className="mt-5 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg shadow-md hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
     >
       {loading ? 'Removing...' : 'Remove from Favourites'}
     </button>
