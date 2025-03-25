@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { removeFromFavorites } from '@/libs/userFavourite';
 
 interface CampgroundData {
   name: string;
@@ -17,14 +18,16 @@ interface CampgroundData {
 
 interface CampgroundActionsProps {
   token: string;
-  campgroundId?: string; // Optional for "Add Campground"
+  campgroundId?: string; // Optional for "Add Campground" or "Delete Campground"
   isAdmin: boolean; // Determines if the button is for adding or deleting
+  favorites?: { _id: string; campground: string }[]; // List of user's favorites
 }
 
 export default function CampgroundActions({
   token,
   campgroundId,
   isAdmin,
+  favorites = [],
 }: CampgroundActionsProps) {
   const router = useRouter();
   const [formData, setFormData] = useState<CampgroundData>({
@@ -48,7 +51,9 @@ export default function CampgroundActions({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ token, ...formData }),
+        body: JSON.stringify({
+          ...formData,
+        }),
       });
 
       if (response.ok) {
@@ -66,22 +71,35 @@ export default function CampgroundActions({
   };
 
   const handleDeleteCampground = async () => {
+    if (!campgroundId) return;
+
     const confirmDelete = confirm('Are you sure you want to delete this campground?');
     if (!confirmDelete) return;
 
-    const response = await fetch(`https://sdev-project-server.vercel.app/api/v1/campgrounds/${campgroundId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      // Delete the campground
+      const response = await fetch(`https://sdev-project-server.vercel.app/api/v1/campgrounds/${campgroundId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Failed to delete campground');
+      }
+
+      // Remove the campground from favorites
+      const favoriteToDelete = favorites.find((fav) => fav.campground === campgroundId);
+      if (favoriteToDelete) {
+        await removeFromFavorites(token, favoriteToDelete._id);
+      }
+
       alert('Campground deleted successfully!');
       router.refresh();
-    } else {
-      alert('Failed to delete campground.');
-      console.log('Delete Error:', await response.text());
+    } catch (error) {
+      console.error('Error deleting campground:', error);
+      alert('An error occurred while deleting the campground');
     }
   };
 

@@ -2,15 +2,42 @@ import Image from 'next/image';
 import { getCampground } from '@/libs/getCampground';
 import BookingButton from '@/components/BookingButton';
 import AddFavourite from '@/components/AddFavourite';
+import RemoveFavourite from '@/components/RemoveFavourite';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
+import UpdateButton from '@/components/UpdateButton';
+import getUserProfile from '@/libs/getUserProfile';
+import getFavourites from '@/libs/getFavourites';
 
 export default async function CampgroundDetailPage({ params }: { params: { _id: string } }) {
   const session = await getServerSession(authOptions);
+  const profile = session ? await getUserProfile(session.user.token) : null;
 
   console.log('Fetching campground details for ID:', params._id);
   const campgroundDetail = await getCampground(params._id);
   console.log('Fetched campground details:', campgroundDetail);
+
+    if (!session || !session.user) {
+        throw new Error("User session is not available");
+    }
+
+    const response = await fetch("https://sdev-project-server.vercel.app/api/v1/favorites", {
+        method: "GET",
+        headers: {
+            authorization: `Bearer ${session.user.token}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch favourites");
+    }
+
+    const Favs = await response.json();
+
+  let isFavourite = false;
+  console.log('User favourites:', Favs.data.map((favorite: { campground: any; }) => favorite.campground)); 
+  // isFavourite = favourites.includes(params._id);
+  
 
   return (
     <main className="text-center p-10 bg-gray-50 h-full">
@@ -44,8 +71,15 @@ export default async function CampgroundDetailPage({ params }: { params: { _id: 
       </div>
       {session && session.user && (
         <div className="space-x-4 mt-6 flex justify-center">
-          <AddFavourite campgroundId={params._id} token={session.user.token} />
+          {isFavourite ? (
+            <RemoveFavourite campgroundId={params._id} token={session.user.token} />
+          ) : (
+            <AddFavourite campgroundId={params._id} token={session.user.token} />
+          )}
           <BookingButton campgroundId={params._id} token={session.user.token} />
+          {profile.data.role === "admin" && (
+            <UpdateButton campgroundId={params._id} token={session.user.token} />
+          )}
         </div>
       )}
     </main>
